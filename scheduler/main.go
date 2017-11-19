@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"runtime"
-	"time"
 )
 
 func cpuIntensive(p *int) {
@@ -13,12 +12,13 @@ func cpuIntensive(p *int) {
 }
 
 func main() {
-	runtime.GOMAXPROCS(2)
+	runtime.GOMAXPROCS(1)
 
 	x := 0
+	y := 0
 	go cpuIntensive(&x)
+	go cpuIntensive(&y)
 
-	time.Sleep(1 * time.Millisecond)
-
-	fmt.Println("terminou", x)
+	runtime.Gosched()
+	fmt.Println("terminou", x, y)
 }
