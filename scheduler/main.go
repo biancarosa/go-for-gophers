@@ -13,7 +13,7 @@ func cpuIntensive(p *int) {
 }
 
 func main() {
-	runtime.GOMAXPROCS(1)
+	runtime.GOMAXPROCS(2)
 
 	x := 0
 	go cpuIntensive(&x)
