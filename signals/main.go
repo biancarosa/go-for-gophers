@@ -18,6 +18,7 @@ func cpuIntensive(p *int) {
 		go waitForIt()
 	}
 }
+
 func main() {
 	trace.Start(os.Stderr)
 	defer trace.Stop()
@@ -28,6 +29,7 @@ func main() {
 			pprof.Lookup("goroutine").WriteTo(os.Stdout, 2)
 		}
 	}()
+
 	x := 0
 	go cpuIntensive(&x)
 	time.Sleep(1 * time.Hour)
