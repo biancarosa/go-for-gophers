@@ -2,24 +2,24 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"runtime"
+	"runtime/trace"
 )
 
-func cpuIntensive(p *int, done chan bool) {
+func cpuIntensive(p *int) {
 	for i := 0; i <= 100000000; i++ {
 		*p = i
 	}
-	done <- true
 }
 
 func main() {
+	trace.Start(os.Stderr)
+	defer trace.Stop()
 	runtime.GOMAXPROCS(1)
 
-	done := make(chan bool)
 	x := 0
-	go cpuIntensive(&x, done)
-
-	<-done
+	go cpuIntensive(&x)
 
 	runtime.Gosched()
 	fmt.Println("terminou", x)

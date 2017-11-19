@@ -5,21 +5,22 @@ import (
 	"runtime"
 )
 
-func cpuIntensive(p *int, done chan bool) {
+func waitForIt() {
+	ch := make(chan bool)
+	<-ch
+}
+
+func cpuIntensive(p *int) {
 	for i := 0; i <= 100000000; i++ {
-		*p = i
+		go waitForIt()
 	}
-	done <- true
 }
 
 func main() {
 	runtime.GOMAXPROCS(1)
 
-	done := make(chan bool)
 	x := 0
-	go cpuIntensive(&x, done)
-
-	<-done
+	go cpuIntensive(&x)
 
 	runtime.Gosched()
 	fmt.Println("terminou", x)
